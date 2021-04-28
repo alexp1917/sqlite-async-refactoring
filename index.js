@@ -16,42 +16,33 @@ function asyncDb(db) {
   });
 }
 
-// var db = asyncDb(db);
+var db = asyncDb(db);
 
-route.get('/labels', (req, res) => {
-  db.all("SELECT * FROM labels", (err, rows) => {
-    if (err) throw err;
+route.get('/labels', async (req, res) => {
+  var rows = await db.all("SELECT * FROM labels");
     res.json({
       error: false,
       data: rows,
     });
-  });
+  // });
 });
 
-route.post('/label', (req, res) => {
+route.post('/label', async (req, res) => {
   var { name, value } = req.body;
-  db.run('INSERT into labels (name, value) values(?,?)',
-    [name, value],
-    function (err) {
-      if (err) throw err;
+  await db.run('INSERT into labels (name, value) values(?,?)',
+    [name, value]);
       res.status(201).json({
         error: false,
         data: "label successfully added",
       });
-    }
-  );
 });
 
-route.patch('/label/:id', (req, res) => {
+route.patch('/label/:id', async (req, res) => {
   var { name, value } = req.body;
-  db.run('UPDATE labels set name = ?, value = ? where id = ?',
-    [name, value],
-    function (err) {
-      if (err) throw err;
+  await db.run('UPDATE labels set name = ?, value = ? where id = ?',
+    [name, value]);
       res.status(201).json({
         error: false,
         data: "label successfully added",
       });
-    }
-  );
 });
