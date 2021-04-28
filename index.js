@@ -1,3 +1,23 @@
+/**
+ * promisify a whole object
+ * @param  {sqlite} db the thing being proxied
+ * @return {Proxy}     sqlite, but with async methods
+ */
+function asyncDb(db) {
+  var cache = {};
+  return new Proxy({
+    get(target, prop) {
+      if (!cache[prop]) {
+        cache[prop] = util.promisify(db[prop]);
+      }
+
+      return cache[prop];
+    }
+  });
+}
+
+// var db = asyncDb(db);
+
 route.get('/labels', (req, res) => {
   db.all("SELECT * FROM labels", (err, rows) => {
     if (err) throw err;
