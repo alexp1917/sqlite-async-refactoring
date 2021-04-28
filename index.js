@@ -60,7 +60,10 @@ route.post('/label', async (req, res) => {
 route.patch('/label/:id', async (req, res) => {
   try {
     await labels.updateOneById(req.params.id, req.body);
-    res.status(201).json({
+    // should not use 201 - 201 implies "non-idempotent"
+    // you can run "update" many times and same effect
+    // if you run "insert" many times, extra junk saved in db
+    res.status(204).json({
       error: false,
       data: "label successfully added",
     });
