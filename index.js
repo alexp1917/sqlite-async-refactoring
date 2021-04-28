@@ -20,29 +20,28 @@ var db = asyncDb(db);
 
 route.get('/labels', async (req, res) => {
   var rows = await db.all("SELECT * FROM labels");
-    res.json({
-      error: false,
-      data: rows,
-    });
-  // });
+  res.json({
+    error: false,
+    data: rows,
+  });
 });
 
 route.post('/label', async (req, res) => {
   var { name, value } = req.body;
   await db.run('INSERT into labels (name, value) values(?,?)',
     [name, value]);
-      res.status(201).json({
-        error: false,
-        data: "label successfully added",
-      });
+  res.status(201).json({
+    error: false,
+    data: "label successfully added",
+  });
 });
 
 route.patch('/label/:id', async (req, res) => {
   var { name, value } = req.body;
   await db.run('UPDATE labels set name = ?, value = ? where id = ?',
     [name, value]);
-      res.status(201).json({
-        error: false,
-        data: "label successfully added",
-      });
+  res.status(201).json({
+    error: false,
+    data: "label successfully added",
+  });
 });
