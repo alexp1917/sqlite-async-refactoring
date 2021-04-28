@@ -54,25 +54,37 @@ LabelRepository.prototype.updateOneById = async function(id, label) {
 var labels = new LabelRepository(db);
 
 route.get('/labels', async (req, res) => {
-  var rows = await labels.getAll();
-  res.json({
-    error: false,
-    data: rows,
-  });
+  try {
+    var rows = await labels.getAll();
+    res.json({
+      error: false,
+      data: rows,
+    });
+  } catch (err) {
+    res.status(500).send({ error: err });
+  }
 });
 
 route.post('/label', async (req, res) => {
-  await labels.insert(req.body);
-  res.status(201).json({
-    error: false,
-    data: "label successfully added",
-  });
+  try {
+    await labels.insert(req.body);
+    res.status(201).json({
+      error: false,
+      data: "label successfully added",
+    });
+  } catch (err) {
+    res.status(500).send({ error: err });
+  }
 });
 
 route.patch('/label/:id', async (req, res) => {
-  await labels.updateOneById(req.params.id, req.body);
-  res.status(201).json({
-    error: false,
-    data: "label successfully added",
-  });
+  try {
+    await labels.updateOneById(req.params.id, req.body);
+    res.status(201).json({
+      error: false,
+      data: "label successfully added",
+    });
+  } catch (err) {
+    res.status(500).send({ error: err });
+  }
 });
